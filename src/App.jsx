@@ -1,8 +1,15 @@
 import React from 'react'
+import { RouterProvider } from 'react-router-dom'
+import routes from './routes/routes'
+import { AuthProvider } from './context/AuthContext'
 
 const App = () => {
   return (
-    <h1>App</h1>
+    <React.StrictMode>
+      <AuthProvider>
+      <RouterProvider router={routes}/>
+      </AuthProvider>
+    </React.StrictMode>
   )
 }
 
