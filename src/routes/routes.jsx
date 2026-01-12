@@ -8,6 +8,8 @@ import Login from "../components/auth/Login";
 import Signup from "../components/auth/Signup";
 import CreatePost from "../components/Posts/CreatePost";
 import Profile from "../components/pages/Profile";
+import PrivateRoutes from "./PrivateRoutes";
+import ForgotPassword from "../components/auth/ForgotPassword";
 
 
 let routes = createBrowserRouter([
@@ -20,8 +22,10 @@ let routes = createBrowserRouter([
                 element:<Home/>
             },
             {
-                path:'/trending',
-                element:<Trending/>
+                path:'/explore',
+                element:<PrivateRoutes>
+                    <Explore/>
+                </PrivateRoutes>
             },
             {
                 path:'/about',
@@ -32,16 +36,26 @@ let routes = createBrowserRouter([
                 element:<Login/>
             },
             {
+                path:'/forgot-password',
+                element:<ForgotPassword/>
+            },
+            {
                 path:'/signup',
                 element:<Signup/>
             },
             {
                 path:'/create-post',
-                element:<CreatePost/>
+                element:
+                <PrivateRoutes>
+
+                <CreatePost/>
+                </PrivateRoutes>
             },
             {
                 path:'/profile',
-                element:<Profile/>
+                element:<PrivateRoutes>
+                <Profile/>
+                </PrivateRoutes>
             }
         ]
     }

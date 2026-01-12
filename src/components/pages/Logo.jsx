@@ -1,11 +1,14 @@
-import React from 'react'
+import CgLogo from "../../assets/Fuina.png";
 
 const Logo = () => {
   return (
-    <div>
-        
-    </div>
-  )
-}
+    <img
+      src={CgLogo}
+      alt="Creative Graveyard Logo"
+      className="h-9 w-auto object-contain"
+      draggable="false"
+    />
+  );
+};
 
-export default Logo
+export default Logo;

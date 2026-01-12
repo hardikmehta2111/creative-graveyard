@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { signupUser, signupWithGoogle } from "../../backend/auth.service";
-// import { signupUser, signupWithGoogle } from "../backend/auth.service.js";
+import { FcGoogle } from "react-icons/fc";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -37,9 +37,7 @@ const Signup = () => {
     try {
       setLoading(true);
       await signupUser(email, password);
-      toast.success(
-        "Verification email sent. Please verify and login."
-      );
+      toast.success("Verification email sent. Please verify and login.");
       navigate("/login");
     } catch (error) {
       toast.error(error.message);
@@ -59,8 +57,21 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#020617] via-[#020617] to-[#1e1b4b]">
-      <div className="w-full max-w-md bg-[#0b1026]/80 backdrop-blur-xl rounded-2xl p-8 shadow-2xl">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-black via-[#020617] to-black px-4">
+
+      
+
+      {/* Tombstone Card */}
+      <div
+        className="
+          mt-10 w-full max-w-md
+          bg-[#0b1026]/80 backdrop-blur-xl
+          border border-white/10
+          rounded-t-[180px] rounded-b-2xl
+          p-8 pt-12
+          shadow-2xl
+        "
+      >
         <h1 className="text-2xl font-semibold text-white mb-6 text-center">
           Create an account
         </h1>
@@ -74,7 +85,7 @@ const Signup = () => {
             value={fullName}
             onChange={handleInput}
             required
-            className="w-full px-4 py-3 rounded-lg bg-[#020617] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full h-11 rounded-lg bg-black/40 border border-white/10 px-4 text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
           />
 
           {/* Email */}
@@ -85,7 +96,7 @@ const Signup = () => {
             value={email}
             onChange={handleInput}
             required
-            className="w-full px-4 py-3 rounded-lg bg-[#020617] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full h-11 rounded-lg bg-black/40 border border-white/10 px-4 text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
           />
 
           {/* Password */}
@@ -97,7 +108,7 @@ const Signup = () => {
               value={password}
               onChange={handleInput}
               required
-              className="w-full px-4 py-3 pr-12 rounded-lg bg-[#020617] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full h-11 rounded-lg bg-black/40 border border-white/10 px-4 pr-12 text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
@@ -116,23 +127,37 @@ const Signup = () => {
               value={confirmPassword}
               onChange={handleInput}
               required
-              className="w-full px-4 py-3 pr-12 rounded-lg bg-[#020617] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full h-11 rounded-lg bg-black/40 border border-white/10 px-4 pr-12 text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
             <span
-              onClick={() =>
-                setShowConfirmPassword(!showConfirmPassword)
-              }
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
             >
               {showConfirmPassword ? <IoEye /> : <IoEyeOff />}
             </span>
           </div>
 
-          {/* Email Signup Button */}
+          {/* Anonymity Guaranteed Box */}
+          <div className="rounded-xl bg-black/40 border border-white/10 p-4">
+            <p className="flex items-center gap-2 text-sm text-white font-medium">
+              <IoEyeOff className="text-base opacity-80" />
+              Anonymity Guaranteed
+            </p>
+
+            <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+              Failure should be shared without fear. Post as a{" "}
+              <span className="text-white">Ghost</span> (Anonymous) or use your real name.
+            </p>
+          </div>
+
+
+          {/* Signup Button (UNCHANGED TEXT) */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-500 hover:bg-emerald-600 transition py-3 rounded-lg font-semibold text-black disabled:opacity-60"
+            className="w-full bg-white/10 hover:bg-white/20 transition py-3 rounded-lg font-semibold text-white disabled:opacity-60"
+
+
           >
             Sign up
           </button>
@@ -144,19 +169,32 @@ const Signup = () => {
         {/* Google Signup */}
         <button
           onClick={handleGoogleSignup}
-          className="w-full bg-white hover:bg-gray-100 transition py-3 rounded-lg font-semibold text-black"
+          className="
+    w-full
+    flex items-center justify-center gap-3
+    bg-black/40 hover:bg-black/60
+    border border-white/10
+    transition
+    py-3 rounded-lg
+    font-semibold text-white
+  "
         >
-          Continue with Google
+          Continue with Google <FcGoogle className="text-lg" />
         </button>
+
 
         {/* Login Redirect */}
         <p className="text-center text-gray-400 mt-5">
           Already have an account?{" "}
-          <Link to="/login" className="text-emerald-400 hover:underline">
+          <Link to="/login" className="text-white hover:underline">
             Login
           </Link>
         </p>
       </div>
+
+      <p className="mt-8 text-xs text-gray-600">
+        R.I.P. Creative Graveyard
+      </p>
     </div>
   );
 };
