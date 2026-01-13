@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      await signupUser(email, password);
+      await signupUser(email, password,fullName);
       toast.success("Verification email sent. Please verify and login.");
       navigate("/login");
     } catch (error) {
