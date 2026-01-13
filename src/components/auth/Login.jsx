@@ -31,6 +31,7 @@ const Login = () => {
 
     try {
       setLoading(true);
+      
       await loginUser(email, password);
       toast.success("Welcome back to the sanctuary");
       navigate("/");
