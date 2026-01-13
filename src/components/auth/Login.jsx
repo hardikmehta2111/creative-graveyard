@@ -140,16 +140,7 @@ const Login = () => {
         </p>
       </div>
 
-      {/* Footer */}
-      <div className="mt-10 text-xs text-gray-500 flex gap-4">
-        <span>Terms</span>
-        <span>Privacy</span>
-        <span>Contact</span>
-      </div>
-
-      <p className="mt-2 text-xs text-gray-600">
-        R.I.P. Creative Graveyard
-      </p>
+      
     </div>
   );
 };

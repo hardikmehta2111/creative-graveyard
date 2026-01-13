@@ -7,3 +7,11 @@
   .logo-font {
     font-family: "Lacquer", cursive !important;
   }
+
+   html,
+  body,
+  #root {
+    background-color: #020617;
+    min-height: 100%;
+    margin: 0;
+  }

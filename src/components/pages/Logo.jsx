@@ -1,4 +1,4 @@
-import CgLogo from "../../assets/Fuina.png";
+import CgLogo from "../../assets/CGLOGO.png";
 
 const Logo = () => {
   return (

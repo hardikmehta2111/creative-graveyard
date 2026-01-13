@@ -26,14 +26,26 @@ export const signupUser = async (email, password) => {
     password
   );
 
+  const user = userCredential.user;
+
+  // 🔥 CREATE USER PROFILE IN FIRESTORE
+  await setDoc(doc(db, "users", user.uid), {
+    displayName: "Anonymous Ghost",
+    bio: "",
+    photoURL: "",
+    isAnonymous: false,
+    createdAt: serverTimestamp(),
+  });
+
   // Send verification email
-  await sendEmailVerification(userCredential.user);
+  await sendEmailVerification(user);
 
   // Logout user until verified
   await signOut(auth);
 
   return true;
 };
+
 
 /**
  * Signup / Login with Google

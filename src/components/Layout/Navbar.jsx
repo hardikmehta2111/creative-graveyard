@@ -27,7 +27,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-full bg-gradient-to-r from-black via-[#020617] to-black border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center logo-font">
+      <div className="max-w-7xl mx-auto  py-4 flex justify-between items-center logo-font">
         {/* Left: Logo */}
         <div className="text-white text-lg font-semibold tracking-wide ">
           <NavLink
