@@ -3,22 +3,20 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import Spinner from "../../helper/Spinner";
-import { uploadToCloudinary } from "../../backend/cloudinary.service";
 import { updateUserProfile } from "../../backend/profile.service";
 import { useAuthContext } from "../../context/AuthContext";
 
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { profile, refreshProfile } = useOutletContext();
+  const { profile, setProfile } = useOutletContext();
+
 
   const [formData, setFormData] = useState({
     displayName: "",
     bio: "",
   });
 
-  const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState("");
   const [loading, setLoading] = useState(false);
 
   // 🔥 PREFILL FORM
@@ -29,10 +27,9 @@ const EditProfile = () => {
       displayName: profile.displayName ?? "",
       bio: profile.bio ?? "",
     });
-
-    setPhotoPreview(profile.photoURL ?? "");
   }, [profile]);
 
+  // safety guard
   if (!profile) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -46,38 +43,22 @@ const EditProfile = () => {
     setFormData((p) => ({ ...p, [name]: value }));
   };
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please select an image file");
-      return;
-    }
-
-    setPhotoFile(file);
-    setPhotoPreview(URL.createObjectURL(file));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
 
-      let photoURL = profile.photoURL || "";
-
-      if (photoFile) {
-        photoURL = await uploadToCloudinary(photoFile);
-      }
-
       await updateUserProfile(user.uid, {
         displayName: formData.displayName,
         bio: formData.bio,
-        photoURL,
       });
 
-      await refreshProfile(); // 🔥 THIS REFRESHES PROFILE CARD
+      setProfile((prev) => ({
+        ...prev,
+        displayName: formData.displayName,
+        bio: formData.bio,
+      }));
 
       toast.success("Profile updated successfully");
       navigate("/profile");
@@ -90,7 +71,7 @@ const EditProfile = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      {loading && <Spinner fullScreen text="Updating your epitaph..." />}
+      {loading && <Spinner fullScreen text="Updating profile..." />}
 
       <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
         <h1 className="text-xl font-semibold text-white mb-6">
@@ -99,40 +80,7 @@ const EditProfile = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Photo */}
-          <div>
-            <label className="text-xs text-gray-400 block mb-2">
-              PROFILE PHOTO
-            </label>
-
-            <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-black/40 border border-white/20 overflow-hidden">
-                {photoPreview ? (
-                  <img
-                    src={photoPreview}
-                    alt="preview"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-                    No photo
-                  </div>
-                )}
-              </div>
-
-              <label className="cursor-pointer text-sm text-gray-300 hover:text-white transition">
-                Change Photo
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="hidden"
-                />
-              </label>
-            </div>
-          </div>
-
-          {/* Username */}
+          {/* Username (LOCKED) */}
           <div>
             <label className="text-xs text-gray-400 block mb-1">
               USERNAME (LOCKED)

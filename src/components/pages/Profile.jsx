@@ -1,43 +1,56 @@
-import { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import { useAuthContext } from "../../context/AuthContext";
+import { getUserProfile } from "../../backend/profile.service";
+
 import ProfileCard from "../profile/ProfileCard";
-import EditProfile from "../profile/EditProfile";
+import Spinner from "../../helper/Spinner";
 
 const Profile = () => {
-  // profile from ProfileLayout
-  const { profile: outletProfile } = useOutletContext();
+  const { user } = useAuthContext();
 
-  // 🔥 LOCAL STATE (THIS IS NEW)
-  const [profile, setProfile] = useState(outletProfile);
-  const [isEditing, setIsEditing] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // keep local state in sync on first load / refresh
+  // 🔥 FETCH PROFILE ONCE
   useEffect(() => {
-    setProfile(outletProfile);
-  }, [outletProfile]);
+    const fetchProfile = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        const data = await getUserProfile(user.uid);
+        setProfile(data);
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="py-20 flex justify-center">
+        <Spinner text="Loading profile..." />
+      </div>
+    );
+  }
 
   if (!profile) return null;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
 
-      {/* Profile Card */}
-      <ProfileCard
-        profile={profile}
-        onEdit={() => setIsEditing(true)}
-      />
+      {/* 🔥 ALWAYS VISIBLE */}
+      <ProfileCard profile={profile} />
 
-      {/* Edit Profile inline */}
-      {isEditing && (
-        <EditProfile
-          profile={profile}
-          onClose={() => setIsEditing(false)}
-          onUpdate={(updatedProfile) => {
-            setProfile(updatedProfile); // 🔥 THIS IS THE REFRESH
-            setIsEditing(false);
-          }}
-        />
-      )}
+      {/* 🔥 FEATURE AREA */}
+      <Outlet context={{ profile, setProfile }} />
     </div>
   );
 };

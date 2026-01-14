@@ -1,7 +1,8 @@
 import { memo } from "react";
+import { HiOutlinePencil } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
 
-const ProfileCard = ({ profile }) => {
+const ProfileCard = ({ profile, onEdit, onEditPhoto }) => {
   const initials = profile.displayName
     ?.split(" ")
     .map((w) => w[0])
@@ -14,11 +15,32 @@ const ProfileCard = ({ profile }) => {
 
       {/* Top Section */}
       <div className="flex justify-between items-start gap-6">
+
+        {/* Avatar + Info */}
         <div className="flex gap-5 items-center">
 
           {/* Avatar */}
-          <div className="w-20 h-20 rounded-full bg-black/40 border border-white/20 flex items-center justify-center text-white text-xl font-semibold">
-            {initials || "CG"}
+          <div className="relative">
+            <div className="w-20 h-20 rounded-full bg-black/40 border border-white/20 overflow-hidden flex items-center justify-center text-white text-xl font-semibold">
+              {profile.photoURL ? (
+                <img
+                  src={profile.photoURL}
+                  alt="avatar"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                initials || "CG"
+              )}
+            </div>
+
+            {/* EDIT PHOTO (PENCIL ICON) */}
+            <button
+              onClick={onEditPhoto}
+              title="Edit profile photo"
+              className="absolute -bottom-1 -right-1 bg-black/80 border border-white/20 p-1.5 rounded-full hover:bg-black transition"
+            >
+              <NavLink to={'edit-photo'}> <HiOutlinePencil className="text-white text-sm" /></NavLink>
+            </button>
           </div>
 
           {/* Name & Bio */}
@@ -32,9 +54,9 @@ const ProfileCard = ({ profile }) => {
           </div>
         </div>
 
-        {/* Edit Button */}
-        <NavLink
-          to="edit-profile"
+        {/* EDIT PROFILE BUTTON */}
+        <NavLink to={'edit-info'}
+          onClick={onEdit}
           className="h-fit text-xs border border-white/20 rounded-md px-4 py-2 text-gray-300 hover:text-white hover:border-white transition"
         >
           Edit Profile

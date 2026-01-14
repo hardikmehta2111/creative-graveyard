@@ -20,6 +20,9 @@ import EditProfile from "../components/profile/EditProfile";
 
 // Posts
 import CreatePost from "../components/Posts/CreatePost";
+import ProfilePosts from "../components/profile/ProfilePosts";
+import EditPhoto from "../components/profile/EditPhoto";
+// import ProfileAvatar from "../components/profile/ProfileAvatar";
 
 const routes = createBrowserRouter([
   {
@@ -54,23 +57,28 @@ const routes = createBrowserRouter([
 
       // 🔥 PROFILE (NESTED ROUTES)
       {
-        path: "profile",
+        path: "/profile",
         element: (
           <PrivateRoutes>
-            <ProfileLayout />
+            <Profile />
           </PrivateRoutes>
         ),
         children: [
           {
             index: true,
-            element: <Profile />, // /profile
+            element: <ProfilePosts />, // default
           },
           {
-            path: "edit-profile",
-            element: <EditProfile />, // /profile/edit-profile
+            path: "edit-info",
+            element: <EditProfile />,
+          },
+          {
+            path: "edit-photo",
+            element: <EditPhoto />,
           },
         ],
-      },
+      }
+
     ],
   },
 ]);
