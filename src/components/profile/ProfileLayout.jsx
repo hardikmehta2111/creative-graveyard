@@ -47,5 +47,3 @@ const ProfileLayout = () => {
 
 export default ProfileLayout;
 
-
-<Outlet context={{ profile, setProfile }} />
