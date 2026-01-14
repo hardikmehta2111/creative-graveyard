@@ -1,47 +1,35 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
-import { logoutUser } from "../../backend/auth.service";
 import { HiMenu, HiX } from "react-icons/hi";
 import Logo from "../pages/Logo";
 
 const Navbar = () => {
   const { user, loading } = useAuthContext();
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   if (loading) return null;
 
-  const handleLogout = async () => {
-    await logoutUser();
-    navigate("/login");
-    setOpen(false);
-  };
-
   const linkClass = ({ isActive }) =>
-    `px-4 py-1.5 rounded-full text-sm font-medium transition ${isActive
-      ? "bg-white/10 text-white border border-white/20"
-      : "text-gray-300 hover:text-white"
+    `px-4 py-1.5 rounded-full text-sm font-medium transition ${
+      isActive
+        ? "bg-white/10 text-white border border-white/20"
+        : "text-gray-300 hover:text-white"
     }`;
-
 
   return (
     <nav className="w-full bg-gradient-to-r from-black via-[#020617] to-black border-b border-white/10">
-      <div className="max-w-7xl mx-auto  py-4 flex justify-between items-center logo-font">
-        {/* Left: Logo */}
-        <div className="text-white text-lg font-semibold tracking-wide ">
-          <NavLink
-            to="/"
-            className="flex items-center gap-3 text-white font-semibold tracking-wide logo-font hover:opacity-90 transition"
-          >
-            <Logo />
-
-            <span className="hidden sm:block text-lg logo-font">
-              CREATIVE GRAVEYARD
-            </span>
-          </NavLink>
-
-        </div>
+      <div className="max-w-7xl mx-auto py-4 flex justify-between items-center logo-font">
+        {/* Logo */}
+        <NavLink
+          to="/"
+          className="flex items-center gap-3 text-white font-semibold tracking-wide logo-font hover:opacity-90 transition"
+        >
+          <Logo />
+          <span className="hidden sm:block text-lg logo-font">
+            CREATIVE GRAVEYARD
+          </span>
+        </NavLink>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6">
@@ -73,18 +61,11 @@ const Navbar = () => {
               <NavLink to="/profile" className={linkClass}>
                 Profile
               </NavLink>
-
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-1.5 border border-white/20 rounded-full text-gray-300 hover:text-white hover:border-white transition text-sm"
-              >
-                Sign Out
-              </button>
             </>
           )}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Toggle */}
         <button
           onClick={() => setOpen(!open)}
           className="md:hidden text-white text-2xl"
@@ -100,16 +81,28 @@ const Navbar = () => {
             Home
           </NavLink>
 
-          <NavLink onClick={() => setOpen(false)} to="/explore" className={linkClass}>
+          <NavLink
+            onClick={() => setOpen(false)}
+            to="/explore"
+            className={linkClass}
+          >
             Explore
           </NavLink>
 
           {!user && (
             <>
-              <NavLink onClick={() => setOpen(false)} to="/login" className={linkClass}>
+              <NavLink
+                onClick={() => setOpen(false)}
+                to="/login"
+                className={linkClass}
+              >
                 Login
               </NavLink>
-              <NavLink onClick={() => setOpen(false)} to="/signup" className={linkClass}>
+              <NavLink
+                onClick={() => setOpen(false)}
+                to="/signup"
+                className={linkClass}
+              >
                 Signup
               </NavLink>
             </>
@@ -132,13 +125,6 @@ const Navbar = () => {
               >
                 Profile
               </NavLink>
-
-              <button
-                onClick={handleLogout}
-                className="mt-2 px-4 py-2 border border-white/20 rounded-full text-gray-300 hover:text-white hover:border-white transition text-sm text-left"
-              >
-                Sign Out
-              </button>
             </>
           )}
         </div>

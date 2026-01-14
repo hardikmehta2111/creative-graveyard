@@ -55,12 +55,7 @@ const ProfileCard = ({ profile, onEdit, onEditPhoto }) => {
         </div>
 
         {/* EDIT PROFILE BUTTON */}
-        <NavLink to={'edit-info'}
-          onClick={onEdit}
-          className="h-fit text-xs border border-white/20 rounded-md px-4 py-2 text-gray-300 hover:text-white hover:border-white transition"
-        >
-          Edit Profile
-        </NavLink>
+        
       </div>
 
       {/* Divider */}

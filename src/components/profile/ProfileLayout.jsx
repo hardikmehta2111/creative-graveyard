@@ -1,9 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import toast from "react-hot-toast";
-
-import { useAuthContext } from "../../context/AuthContext";
+import ProfileSidebar from "./ProfileSidebar";
 import { getUserProfile } from "../../backend/profile.service";
+import { useAuthContext } from "../../context/AuthContext";
 import Spinner from "../../helper/Spinner";
 
 const ProfileLayout = () => {
@@ -11,25 +10,18 @@ const ProfileLayout = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = useCallback(async () => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const data = await getUserProfile(user.uid);
-      setProfile(data);
-    } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
-
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getUserProfile(user.uid);
+        setProfile(data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProfile();
-  }, [fetchProfile]);
+  }, [user.uid]);
 
   if (loading) {
     return (
@@ -39,20 +31,21 @@ const ProfileLayout = () => {
     );
   }
 
-  if (!profile) {
-    return (
-      <div className="py-20 text-center text-gray-400">
-        Profile not found
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-[calc(100vh-80px)] px-4 py-10">
-      {/* 🔥 SINGLE SOURCE OF TRUTH */}
-      <Outlet context={{ profile, refreshProfile: fetchProfile }} />
+    <div className="flex min-h-[calc(100vh-80px)]">
+      {/* SIDEBAR */}
+      <ProfileSidebar />
+
+      {/* CONTENT */}
+      <main className="flex-1 bg-gradient-to-b from-black via-[#020617] to-black p-6">
+        <Outlet context={{ profile, setProfile }} />
+
+      </main>
     </div>
   );
 };
 
 export default ProfileLayout;
+
+
+<Outlet context={{ profile, setProfile }} />

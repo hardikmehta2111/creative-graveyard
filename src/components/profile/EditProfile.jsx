@@ -9,8 +9,9 @@ import { useAuthContext } from "../../context/AuthContext";
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { profile, setProfile } = useOutletContext();
 
+  // ✅ comes from ProfileLayout → <Outlet context={{ profile, setProfile }} />
+  const { profile, setProfile } = useOutletContext();
 
   const [formData, setFormData] = useState({
     displayName: "",
@@ -29,7 +30,7 @@ const EditProfile = () => {
     });
   }, [profile]);
 
-  // safety guard
+  // 🛡 SAFETY
   if (!profile) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -40,7 +41,7 @@ const EditProfile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((p) => ({ ...p, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -49,11 +50,13 @@ const EditProfile = () => {
     try {
       setLoading(true);
 
+      // 🔥 Update DB
       await updateUserProfile(user.uid, {
         displayName: formData.displayName,
         bio: formData.bio,
       });
 
+      // 🔥 Update local profile (instant UI update)
       setProfile((prev) => ({
         ...prev,
         displayName: formData.displayName,
@@ -63,14 +66,14 @@ const EditProfile = () => {
       toast.success("Profile updated successfully");
       navigate("/profile");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.message || "Failed to update profile");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
+    <div className="w-full h-full p-6">
       {loading && <Spinner fullScreen text="Updating profile..." />}
 
       <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
@@ -79,7 +82,6 @@ const EditProfile = () => {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-
           {/* Username (LOCKED) */}
           <div>
             <label className="text-xs text-gray-400 block mb-1">
@@ -138,7 +140,6 @@ const EditProfile = () => {
               Cancel
             </button>
           </div>
-
         </form>
       </div>
     </div>

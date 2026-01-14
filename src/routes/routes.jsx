@@ -22,6 +22,7 @@ import EditProfile from "../components/profile/EditProfile";
 import CreatePost from "../components/Posts/CreatePost";
 import ProfilePosts from "../components/profile/ProfilePosts";
 import EditPhoto from "../components/profile/EditPhoto";
+import ChangePassword from "../components/auth/ChangePassword";
 // import ProfileAvatar from "../components/profile/ProfileAvatar";
 
 const routes = createBrowserRouter([
@@ -60,24 +61,29 @@ const routes = createBrowserRouter([
         path: "/profile",
         element: (
           <PrivateRoutes>
-            <Profile />
+            <ProfileLayout />
           </PrivateRoutes>
         ),
         children: [
           {
             index: true,
-            element: <ProfilePosts />, // default
+            element: <Profile />,        // My Grave
           },
           {
-            path: "edit-info",
-            element: <EditProfile />,
+            path: "edit",
+            element: <EditProfile />,    // Edit Epitaph
           },
           {
             path: "edit-photo",
-            element: <EditPhoto />,
+            element: <EditPhoto />,      // Change Portrait
+          },
+          {
+            path: "/profile/change-password",
+            element: <ChangePassword />,
           },
         ],
       }
+
 
     ],
   },

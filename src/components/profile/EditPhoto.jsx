@@ -13,6 +13,8 @@ const EditPhoto = () => {
 
   // 🔥 from Profile.jsx
   const { profile, setProfile } = useOutletContext();
+  console.log(profile);
+  
 
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(profile?.photoURL || "");
@@ -82,7 +84,7 @@ const EditPhoto = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
+    <div className="w-full h-full p-6">
       {loading && <Spinner fullScreen text={`Uploading ${progress}%`} />}
 
       <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
