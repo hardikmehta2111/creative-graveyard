@@ -1,6 +1,9 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "./FireBaseConfig";
 
+/**
+ * 🔍 Get user profile
+ */
 export const getUserProfile = async (uid) => {
   const ref = doc(db, "users", uid);
   const snap = await getDoc(ref);
@@ -10,4 +13,19 @@ export const getUserProfile = async (uid) => {
   }
 
   return snap.data();
+};
+
+/**
+ * ✏️ Update user profile (Edit Profile)
+ * Allowed fields only
+ */
+export const updateUserProfile = async (uid, updates) => {
+  const ref = doc(db, "users", uid);
+
+  await updateDoc(ref, {
+    ...updates,
+    updatedAt: serverTimestamp(),
+  });
+
+  return true;
 };
