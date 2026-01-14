@@ -10,7 +10,7 @@ import { useAuthContext } from "../../context/AuthContext";
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { profile } = useOutletContext();
+  const { profile, refreshProfile } = useOutletContext();
 
   const [formData, setFormData] = useState({
     displayName: "",
@@ -21,7 +21,7 @@ const EditProfile = () => {
   const [photoPreview, setPhotoPreview] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔥 PREFILL FORM WHEN PROFILE LOADS
+  // 🔥 PREFILL FORM
   useEffect(() => {
     if (!profile) return;
 
@@ -33,7 +33,6 @@ const EditProfile = () => {
     setPhotoPreview(profile.photoURL ?? "");
   }, [profile]);
 
-  // 🔐 HARD GUARD (DO NOT REMOVE)
   if (!profile) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -44,7 +43,7 @@ const EditProfile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((p) => ({ ...p, [name]: value }));
   };
 
   const handlePhotoChange = (e) => {
@@ -78,10 +77,13 @@ const EditProfile = () => {
         photoURL,
       });
 
+      await refreshProfile(); // 🔥 THIS REFRESHES PROFILE CARD
+
       toast.success("Profile updated successfully");
       navigate("/profile");
     } catch (err) {
       toast.error(err.message);
+    } finally {
       setLoading(false);
     }
   };
@@ -97,7 +99,7 @@ const EditProfile = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Profile Photo */}
+          {/* Photo */}
           <div>
             <label className="text-xs text-gray-400 block mb-2">
               PROFILE PHOTO
@@ -130,7 +132,7 @@ const EditProfile = () => {
             </div>
           </div>
 
-          {/* Username (Locked) */}
+          {/* Username */}
           <div>
             <label className="text-xs text-gray-400 block mb-1">
               USERNAME (LOCKED)
@@ -139,14 +141,14 @@ const EditProfile = () => {
               type="text"
               value={`@${profile.username}`}
               disabled
-              className="w-full h-11 rounded-lg bg-black/30 border border-white/10 px-4 text-gray-400 text-sm cursor-not-allowed"
+              className="w-full h-11 rounded-lg bg-black/30 border border-white/10 px-4 text-gray-400 text-sm"
             />
           </div>
 
           {/* Display Name */}
           <div>
             <label className="text-xs text-gray-400 block mb-1">
-              DISPLAY NAME
+              FULL NAME
             </label>
             <input
               type="text"

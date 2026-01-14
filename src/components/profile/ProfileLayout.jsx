@@ -12,22 +12,15 @@ const ProfileLayout = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = useCallback(async () => {
-    console.log("FETCH PROFILE CALLED");
-    console.log("AUTH USER:", user);
-
-    // 🔴 VERY IMPORTANT FIX
     if (!user) {
-      console.log("USER IS NULL — STOP LOADING");
       setLoading(false);
       return;
     }
 
     try {
       const data = await getUserProfile(user.uid);
-      console.log("PROFILE DATA:", data);
       setProfile(data);
     } catch (err) {
-      console.error("PROFILE ERROR:", err);
       toast.error(err.message);
     } finally {
       setLoading(false);
@@ -41,7 +34,7 @@ const ProfileLayout = () => {
   if (loading) {
     return (
       <div className="py-20 flex justify-center">
-        <Spinner text="Summoning memories..." />
+        <Spinner text="Loading profile..." />
       </div>
     );
   }
@@ -57,7 +50,7 @@ const ProfileLayout = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] px-4 py-10">
       {/* 🔥 SINGLE SOURCE OF TRUTH */}
-      <Outlet context={{ profile }} />
+      <Outlet context={{ profile, refreshProfile: fetchProfile }} />
     </div>
   );
 };
