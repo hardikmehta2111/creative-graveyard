@@ -1,43 +1,11 @@
-import { useEffect, useState, useCallback } from "react";
-import { useAuthContext } from "../../context/AuthContext";
-import { getUserProfile } from "../../backend/profile.service.js";
-// import ProfileCard from "./ProfileCard";
-// import Spinner from "../../components/ui/Spinner";
-import toast from "react-hot-toast";
-import ProfileCard from "../profile/ProfileCard.jsx";
-import Spinner from "../../helper/Spinner.jsx";
+import { useOutletContext } from "react-router-dom";
+import ProfileCard from "../profile/ProfileCard";
 
 const Profile = () => {
-  const { user } = useAuthContext();
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // 🔥 profile comes from ProfileLayout
+  const { profile } = useOutletContext();
 
-  const fetchProfile = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      setLoading(true);
-      const data = await getUserProfile(user.uid);
-      setProfile(data);
-    } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
-  if (loading) {
-    return (
-      <div className="py-20 flex justify-center">
-        <Spinner text="Summoning memories..." />
-      </div>
-    );
-  }
-
+  // Safety guard (should rarely trigger)
   if (!profile) return null;
 
   return (
