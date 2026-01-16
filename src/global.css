@@ -1,17 +1,60 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Lacquer&display=swap");
 
-/* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=Lacquer&display=swap');
+.logo-font {
+  font-family: "Lacquer", cursive !important;
+}
 
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-  .logo-font {
-    font-family: "Lacquer", cursive !important;
-  }
+/* ✅ EXACT HOME BACKGROUND STYLE (smoky diagonal + vignette) */
+body {
+  color: white;
 
-   html,
-  body,
-  #root {
-    background-color: #020617;
-    min-height: 100%;
-    margin: 0;
-  }
+  background:
+    /* Dark vignette */
+    radial-gradient(circle at center, rgba(0,0,0,0) 35%, rgba(0,0,0,0.92) 100%),
+
+    /* Smoky diagonal waves */
+    repeating-linear-gradient(
+      135deg,
+      rgba(255,255,255,0.035) 0px,
+      rgba(255,255,255,0.015) 25px,
+      rgba(0,0,0,0.12) 50px
+    ),
+
+    /* Base dark */
+    linear-gradient(to bottom, #05070c, #020617, #000000);
+
+  background-size: cover;
+  background-attachment: fixed;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* ✅ Smooth scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
+/* ✅ Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
