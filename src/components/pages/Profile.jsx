@@ -7,6 +7,8 @@ import { getUserProfile } from "../../backend/profile.service";
 
 import ProfileCard from "../profile/ProfileCard";
 import Spinner from "../../helper/Spinner";
+import MyPosts from "../profile/MyPosts";
+// import MyPosts from "./MyPosts";
 
 const Profile = () => {
   const { user } = useAuthContext();
@@ -14,10 +16,13 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 FETCH PROFILE ONCE
+  // ✅ Stats state
+  const [postsCount, setPostsCount] = useState(0);
+  const [firstBurialYear, setFirstBurialYear] = useState("-");
+
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!user) return;
+      if (!user?.uid) return;
 
       try {
         setLoading(true);
@@ -31,7 +36,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, [user]);
+  }, [user?.uid]);
 
   if (loading) {
     return (
@@ -45,11 +50,21 @@ const Profile = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+      {/* ✅ ProfileCard now gets real stats */}
+      <ProfileCard
+        profile={profile}
+        postsCount={postsCount}
+        firstBurialYear={firstBurialYear}
+      />
 
-      {/* 🔥 ALWAYS VISIBLE */}
-      <ProfileCard profile={profile} />
+      {/* ✅ Posts below profile card */}
+      <MyPosts
+        onStats={({ postsCount, firstBurialYear }) => {
+          setPostsCount(postsCount);
+          setFirstBurialYear(firstBurialYear);
+        }}
+      />
 
-      {/* 🔥 FEATURE AREA */}
       <Outlet context={{ profile, setProfile }} />
     </div>
   );

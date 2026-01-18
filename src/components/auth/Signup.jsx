@@ -83,7 +83,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-black via-[#020617] to-black px-4">
+    <div className="h-[calc(100vh-80px)] w-full flex flex-col items-center justify-center  px-4">
 
       {loading && (
         <Spinner fullScreen text="Preparing your grave..." />

@@ -1,6 +1,14 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
+// import { auth } from "../backend/FireBaseConfig";
+// import { createPost } from "../backend/post.service";
+import { auth } from "../../backend/FireBaseConfig";
+import { createPost } from "../../backend/post.service";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -8,6 +16,7 @@ const CreatePost = () => {
     lessonLearned: "",
     isAnonymous: true,
   });
+  let navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -17,37 +26,79 @@ const CreatePost = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const user = auth.currentUser;
+
+    if (!user) {
+      toast.error("Please login first");
+      return;
+    }
+
+    if (!formData.title.trim()) {
+      toast.error("Project name is required");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // ✅ Post payload
+      const payload = {
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        reasonForFailure: formData.reasonForFailure.trim(),
+        lessonLearned: formData.lessonLearned.trim(),
+
+        isAnonymous: formData.isAnonymous,
+        authorId: user.uid,
+      };
+
+      // ✅ Optional: store photoURL only if NOT anonymous
+      
+
+      await createPost(payload);
+
+      toast.success("Post buried successfully 🪦");
+      navigate('/profile')
+
+      // ✅ reset
+      setFormData({
+        title: "",
+        description: "",
+        reasonForFailure: "",
+        lessonLearned: "",
+        isAnonymous: true,
+      });
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message || "Failed to create post");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-[calc(100vh-80px)] px-4 py-12">
-      {/* ✅ MAIN FORM TAG (everything inside) */}
       <form onSubmit={handleSubmit} className="space-y-10">
-        {/* ✅ Heading */}
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-semibold tracking-wide text-white">
             CARVE A TOMBSTONE
           </h1>
-
           <p className="mt-2 text-sm md:text-base text-gray-400 italic">
             “Every end is a new beginning. Share your story.”
           </p>
         </div>
 
-        {/* ✅ Tombstone Form Box */}
         <div className="flex justify-center">
           <div className="relative w-full max-w-3xl">
-            {/* glow */}
             <div className="absolute inset-0 blur-3xl opacity-30 bg-indigo-500/10 rounded-full" />
 
-            <div className="relative rounded-t-[110px] rounded-b-3xl bg-black/60 border border-white/10 shadow-2xl overflow-hidden">
-              {/* ✅ EXTRA PADDING ADDED */}
+            <div className="relative rounded-t-[110px] rounded-b-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
               <div className="pt-14 pb-12 px-6 sm:px-10">
                 <div className="space-y-7">
-                  {/* ✅ Title */}
+                  {/* Title */}
                   <div>
                     <label className="text-[11px] tracking-widest text-gray-400 block mb-2 uppercase">
                       Project Name
@@ -62,7 +113,7 @@ const CreatePost = () => {
                     />
                   </div>
 
-                  {/* ✅ Description */}
+                  {/* Description */}
                   <div>
                     <label className="text-[11px] tracking-widest text-gray-400 block mb-2 uppercase">
                       Description
@@ -77,10 +128,10 @@ const CreatePost = () => {
                     />
                   </div>
 
-                  {/* ✅ Reason */}
+                  {/* Reason */}
                   <div>
                     <label className="text-[11px] tracking-widest text-gray-400 block mb-2 uppercase">
-                      The Eulogy (What went wrong?)
+                      Reason For Failure
                     </label>
                     <textarea
                       name="reasonForFailure"
@@ -92,7 +143,7 @@ const CreatePost = () => {
                     />
                   </div>
 
-                  {/* ✅ Lessons */}
+                  {/* Lessons */}
                   <div>
                     <label className="text-[11px] tracking-widest text-gray-400 block mb-2 uppercase">
                       Lessons Learned
@@ -107,7 +158,7 @@ const CreatePost = () => {
                     />
                   </div>
 
-                  {/* ✅ Anonymous Toggle */}
+                  {/* Anonymous Toggle */}
                   <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
                     <div className="flex items-center justify-between gap-6">
                       <div>
@@ -133,18 +184,18 @@ const CreatePost = () => {
                     </div>
                   </div>
 
-                  {/* ✅ Submit */}
+                  {/* Submit */}
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition"
+                    disabled={loading}
+                    className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition disabled:opacity-60"
                   >
-                    ⚰️ Bury Post
+                    {loading ? "Burying..." : "⚰️ Bury Post"}
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* bottom spacing */}
             <div className="h-10" />
           </div>
         </div>

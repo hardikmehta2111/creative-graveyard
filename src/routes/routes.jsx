@@ -20,7 +20,7 @@ import EditProfile from "../components/profile/EditProfile";
 
 // Posts
 import CreatePost from "../components/Posts/CreatePost";
-import ProfilePosts from "../components/profile/ProfilePosts";
+// import ProfilePosts from "../components/profile/ProfilePosts";
 import EditPhoto from "../components/profile/EditPhoto";
 import ChangePassword from "../components/auth/ChangePassword";
 // import ProfileAvatar from "../components/profile/ProfileAvatar";
