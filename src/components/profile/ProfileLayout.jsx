@@ -27,15 +27,17 @@ const ProfileLayout = () => {
     };
 
     fetchProfile();
-  }, [user?.uid]); // ✅ only depends on uid
+  }, [user?.uid]);
 
   return (
-    <div className="flex min-h-[calc(100vh-80px)]">
-      {/* SIDEBAR */}
-      <ProfileSidebar />
+    <div className="flex h-[calc(100vh-80px)] overflow-hidden">
+      {/* ✅ SIDEBAR (no scroll) */}
+      <div className="shrink-0">
+        <ProfileSidebar />
+      </div>
 
-      {/* CONTENT */}
-      <main className="flex-1 bg-gradient-to-b from-black via-[#020617] to-black p-6">
+      {/* ✅ ONLY MAIN CONTENT scroll */}
+      <main className="flex-1 overflow-y-auto bg-gradient-to-b from-black via-[#020617] to-black p-6">
         {loading ? (
           <div className="py-20 flex justify-center">
             <Spinner text="Loading profile..." />

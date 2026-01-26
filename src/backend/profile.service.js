@@ -12,7 +12,7 @@ export const getUserProfile = async (uid) => {
     throw new Error("Profile not found");
   }
 
-  return snap.data();
+  return { id: snap.id, ...snap.data() };
 };
 
 /**

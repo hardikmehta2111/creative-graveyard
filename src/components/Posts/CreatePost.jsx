@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-// import { auth } from "../backend/FireBaseConfig";
-// import { createPost } from "../backend/post.service";
 import { auth } from "../../backend/FireBaseConfig";
 import { createPost } from "../../backend/post.service";
+import { getUserProfile } from "../../backend/profile.service";
 import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -16,10 +16,29 @@ const CreatePost = () => {
     lessonLearned: "",
     isAnonymous: true,
   });
-  let navigate = useNavigate()
+
+  const navigate = useNavigate();
+
+  // ✅ Fetch user profile for username/photo
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user?.uid) return;
+
+        const data = await getUserProfile(user.uid);
+        setProfile(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setFormData((p) => ({
       ...p,
       [name]: type === "checkbox" ? checked : value,
@@ -41,6 +60,12 @@ const CreatePost = () => {
       return;
     }
 
+    // ✅ If not anonymous and profile still loading
+    if (!formData.isAnonymous && !profile) {
+      toast.error("Profile loading... please wait");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -53,17 +78,18 @@ const CreatePost = () => {
 
         isAnonymous: formData.isAnonymous,
         authorId: user.uid,
-      };
 
-      // ✅ Optional: store photoURL only if NOT anonymous
-      
+        // ✅ store username/photo if NOT anonymous
+        // authorUsername: formData.isAnonymous ? "" : profile?.username || "unknown",
+        // authorPhoto: formData.isAnonymous ? "" : profile?.photoURL || "",
+      };
 
       await createPost(payload);
 
       toast.success("Post buried successfully 🪦");
-      navigate('/profile')
+      navigate("/profile");
 
-      // ✅ reset
+      // ✅ reset form
       setFormData({
         title: "",
         description: "",

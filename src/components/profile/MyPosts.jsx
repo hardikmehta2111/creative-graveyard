@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import { getPostsByUser } from "../../backend/post.service";
-import TombstonePostCard from "../../components/profile/TombstonePostCard";
+import TombstonePostCard from "../Posts/TombstonePostCard";
 
 const MyPosts = ({ onStats }) => {
   const { user } = useAuthContext();
