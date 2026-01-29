@@ -9,6 +9,10 @@ import {
 } from "../../backend/post.service";
 import { getUserProfile } from "../../backend/profile.service";
 
+import { useNavigate } from "react-router-dom";
+import { deletePost } from "../../backend/post.service";
+import DeleteConfirmModal from "../modals/DeleteConfirmModal";
+
 const DEFAULT_ANON_PHOTO =
   "https://cdn.pixabay.com/photo/2023/10/03/10/49/anonymous-8291223_1280.png";
 
@@ -22,6 +26,10 @@ const PostDetails = () => {
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+
   // 🌸 likes
   const [flowers, setFlowers] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -33,6 +41,22 @@ const PostDetails = () => {
     { id: 1, name: "Grave Keeper", text: "RIP 🪦 but solid lesson." },
     { id: 2, name: "Midnight Soul", text: "This was inspiring 🔥" },
   ]);
+
+  const navigate = useNavigate();
+
+  const handleConfirmDelete = async () => {
+    try {
+      setDeleting(true);
+      await deletePost(postId);
+      navigate("/"); // after delete
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setDeleting(false);
+      setShowDeleteModal(false);
+    }
+  };
+
 
   useEffect(() => {
     const fetchPostAndAuthor = async () => {
@@ -194,9 +218,17 @@ const PostDetails = () => {
                     <button className="bg-indigo-600 hover:bg-indigo-700 rounded-xl py-2 text-sm transition">
                       Edit
                     </button>
-                    <button className="bg-red-600 hover:bg-red-700 rounded-xl py-2 text-sm transition">
+                    <button
+                      onClick={() => {
+                        console.log("Delete clicked");
+                        setShowDeleteModal(true);
+                      }}
+                      className="bg-red-600 hover:bg-red-700 rounded-xl py-2 text-sm transition"
+                    >
                       Delete
                     </button>
+
+
                   </div>
                 )}
               </div>
@@ -243,17 +275,16 @@ const PostDetails = () => {
                 onClick={handleFlowerToggle}
                 disabled={liking}
                 className={`px-6 py-3 rounded-xl transition text-sm font-semibold disabled:opacity-60
-                  ${
-                    liked
-                      ? "bg-pink-600 hover:bg-pink-700"
-                      : "bg-purple-600 hover:bg-purple-700"
+                    ${liked
+                    ? "bg-pink-600 hover:bg-pink-700"
+                    : "bg-purple-600 hover:bg-purple-700"
                   }`}
               >
                 {liking
                   ? "Burying flowers..."
                   : liked
-                  ? `💐 Flower Left (${flowers})`
-                  : `🌸 Leave a Flower (${flowers})`}
+                    ? `💐 Flower Left (${flowers})`
+                    : `🌸 Leave a Flower (${flowers})`}
               </button>
             </div>
           </div>
@@ -297,6 +328,14 @@ const PostDetails = () => {
           </div>
         </div>
       </div>
+      <DeleteConfirmModal
+  open={showDeleteModal}
+  loading={deleting}
+  onClose={() => setShowDeleteModal(false)}
+  onConfirm={handleConfirmDelete}
+/>
+
+
     </div>
   );
 };

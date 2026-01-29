@@ -62,6 +62,16 @@ export const getPostById = async (postId) => {
 };
 
 // ============================
+// 🗑 DELETE POST
+// ============================
+
+export const deletePost = async (postId) => {
+  const postRef = doc(db, "posts", postId);
+  await deleteDoc(postRef);
+  return true;
+};
+
+// ============================
 // 🌸 LIKE SYSTEM (FLOWERS)
 // ============================
 
