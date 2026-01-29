@@ -1,9 +1,16 @@
 import { memo } from "react";
-import { HiOutlinePencil, HiDotsHorizontal } from "react-icons/hi";
+import { HiOutlinePencil, HiDotsVertical } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
+import TombstonePostCard from "../Posts/TombstonePostCard";
 
-const ProfileCard = ({ profile, onEdit, onEditPhoto, onOpenSidebar }) => {
-  const initials = profile.displayName
+const ProfileCard = ({
+  profile,
+  posts,
+  postsCount,
+  firstBurialYear,
+  onToggleSidebar,
+}) => {
+  const initials = profile?.displayName
     ?.split(" ")
     .map((w) => w[0])
     .join("")
@@ -11,18 +18,22 @@ const ProfileCard = ({ profile, onEdit, onEditPhoto, onOpenSidebar }) => {
     .toUpperCase();
 
   return (
-    <div className="w-full bg-gradient-to-r from-[#0b1026] via-[#111827] to-[#0b1026] border border-white/10 rounded-2xl px-5 py-5 md:px-8 md:py-6">
+    <>
+      {/* ================= PROFILE CARD ================= */}
+      <div className="relative w-full bg-linear-to-r from-[#0b1026] via-[#111827] to-[#0b1026] border border-white/10 rounded-2xl px-5 py-6 md:px-8">
 
-      {/* Top Section */}
-      <div className="flex justify-between items-start gap-4 md:gap-6">
+        {/* MOBILE SIDEBAR TOGGLE (Absolute Top Right) */}
+        <button
+          onClick={onToggleSidebar}
+          className="md:hidden absolute top-4 right-4 text-gray-400 hover:text-white p-2"
+        >
+          <HiDotsVertical size={24} />
+        </button>
 
-        {/* Avatar + Info */}
-        <div className="flex gap-4 md:gap-5 items-center">
-
-          {/* Avatar */}
-          <div className="relative">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/40 border border-white/20 overflow-hidden flex items-center justify-center text-white text-xl font-semibold">
-              {profile.photoURL ? (
+        <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start text-center sm:text-left">
+          <div className="relative shrink-0">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-black/40 border border-white/20 overflow-hidden flex items-center justify-center text-white text-xl font-semibold mx-auto sm:mx-0">
+              {profile?.photoURL ? (
                 <img
                   src={profile.photoURL}
                   alt="avatar"
@@ -33,70 +44,62 @@ const ProfileCard = ({ profile, onEdit, onEditPhoto, onOpenSidebar }) => {
               )}
             </div>
 
-            {/* EDIT PHOTO (PENCIL ICON) */}
-            <button
-              onClick={onEditPhoto}
-              title="Edit profile photo"
-              className="absolute -bottom-1 -right-1 bg-black/80 border border-white/20 p-1.5 rounded-full hover:bg-black transition"
+            <NavLink
+              to="edit-photo"
+              className="absolute -bottom-1 -right-1 bg-black/80 border border-white/20 p-1.5 rounded-full"
             >
-              <NavLink to={'edit-photo'}> <HiOutlinePencil className="text-white text-xs md:text-sm" /></NavLink>
-            </button>
+              <HiOutlinePencil className="text-white text-sm" />
+            </NavLink>
           </div>
 
-          {/* Name & Bio */}
-          <div className="overflow-hidden">
-            <h1 className="text-white text-lg md:text-xl font-semibold tracking-wide truncate">
-              @{profile.username || "anonymous"}
+          <div className="flex-1 min-w-0">
+            <h1 className="text-white text-xl sm:text-2xl font-semibold truncate">
+              @{profile?.username || "anonymous"}
             </h1>
-            <p className="text-gray-400 text-xs md:text-sm italic mt-1 max-w-md break-words md:truncate">
-              {profile.bio || "Building things that break, so I don’t have to."}
+            <p className="text-gray-400 text-sm italic mt-1 break-words">
+              {profile?.bio || "Building things that break, so I don’t have to."}
             </p>
           </div>
         </div>
 
-        {/* MENU BUTTON (Mobile) */}
-        <button
-          onClick={onOpenSidebar}
-          className="md:hidden p-2 text-white/70 hover:text-white transition bg-white/5 rounded-lg border border-white/10 shrink-0"
-        >
-          <HiDotsHorizontal size={20} />
-        </button>
+        <div className="my-6 border-t border-white/10" />
 
-      </div>
+        <div className="grid grid-cols-2 text-center">
+          <div>
+            <p className="text-white text-lg font-semibold">{postsCount}</p>
+            <p className="text-xs text-gray-400 uppercase">
+              Failures Laid to Rest
+            </p>
+          </div>
 
-      {/* Divider */}
-      <div className="my-5 md:my-6 border-t border-white/10" />
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 text-center divide-x divide-white/10">
-        <div className="px-1">
-          <p className="text-white text-base md:text-lg font-semibold">
-            {profile.failuresCount ?? 12}
-          </p>
-          <p className="text-[10px] md:text-xs text-gray-400 uppercase tracking-wide truncate">
-            Failures
-          </p>
-        </div>
-
-        <div className="px-1">
-          <p className="text-white text-base md:text-lg font-semibold">
-            {profile.lessonsCount ?? 45}
-          </p>
-          <p className="text-[10px] md:text-xs text-gray-400 uppercase tracking-wide truncate">
-            Lessons
-          </p>
-        </div>
-
-        <div className="px-1">
-          <p className="text-white text-base md:text-lg font-semibold">
-            {profile.firstBurialYear ?? 2018}
-          </p>
-          <p className="text-[10px] md:text-xs text-gray-400 uppercase tracking-wide truncate">
-            Using
-          </p>
+          <div className="border-l border-white/10">
+            <p className="text-white text-lg font-semibold">
+              {firstBurialYear}
+            </p>
+            <p className="text-xs text-gray-400 uppercase">
+              First Burial
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* ================= POSTS ================= */}
+      <div className="mt-10">
+        {posts.length === 0 && (
+          <p className="text-gray-400 text-center mt-8">
+            No posts yet 🪦
+          </p>
+        )}
+
+        {posts.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            {posts.map((post) => (
+              <TombstonePostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
