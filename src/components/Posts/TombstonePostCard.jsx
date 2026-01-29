@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import gsap from "gsap";
 import { FaCross } from "react-icons/fa";
+import Cross from "./Cross";
 // import { HiOutlinePlus } from "react-icons/hi"; // ✝️ cross icon
 // import { PiCrossBold } from "react-icons/pi";
 
@@ -77,7 +78,7 @@ const TombstonePostCard = ({ post }) => {
         {/* ✝️ CROSS AT TOP */}
         <div className="absolute top-6 flex justify-center w-full">
           <div className="w-10 h-10  flex items-center justify-center">
-            <FaCross className="text-slate-800 h-10 w-10 " />
+            <Cross />
           </div>
         </div>
 
