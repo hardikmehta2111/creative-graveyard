@@ -4,7 +4,7 @@ import { signOut, deleteUser, EmailAuthProvider, reauthenticateWithCredential } 
 import toast from "react-hot-toast";
 import { auth, db } from "../../backend/FireBaseConfig";
 
-import { HiOutlineCamera, HiOutlineLockClosed } from "react-icons/hi";
+import { HiOutlineCamera, HiOutlineLockClosed, HiOutlineLogout } from "react-icons/hi";
 import { FaEdit } from "react-icons/fa";
 
 import {
@@ -21,9 +21,9 @@ import {
 const linkClass = ({ isActive }) =>
   `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all
    ${isActive
-     ? "bg-white/10 text-white border-l-4 border-white"
-     : "text-gray-400 hover:bg-white/5 hover:text-white"
-   }`;
+    ? "bg-white/10 text-white border-l-4 border-white"
+    : "text-gray-400 hover:bg-white/5 hover:text-white"
+  }`;
 
 const ProfileSidebarContent = ({ onNavigate }) => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const ProfileSidebarContent = ({ onNavigate }) => {
     }
   };
 
-  
+
 
 
 
@@ -83,21 +83,20 @@ const ProfileSidebarContent = ({ onNavigate }) => {
         </div>
 
         {/* DANGER */}
-        <div className="pt-4 border-t border-white/10 space-y-2">
+        <div className="pt-4 border-t border-white/10 space-y-2 pb-8 md:pb-0">
           <button
             onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
                        text-sm font-medium text-red-400
-                       hover:bg-red-500/10 hover:text-red-300 transition-all"
+                       hover:bg-red-500/10 hover:text-red-300 transition-all group"
           >
-            🚪 <span>Sign Out</span>
+            <HiOutlineLogout className="text-xl group-hover:scale-110 transition-transform" />
+            <span>Sign Out</span>
           </button>
-
-          
         </div>
       </div>
 
-      
+
     </>
   );
 };

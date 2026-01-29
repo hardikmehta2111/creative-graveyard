@@ -16,7 +16,7 @@ const ProfileSidebar = ({ isOpen, onClose }) => {
       <aside
         className={`
           fixed md:static z-50 top-0 left-0
-          h-[calc(100vh-80px)] w-64
+          h-[100dvh] md:h-[calc(100vh-80px)] w-64
           bg-black/90 border-r border-white/10 p-4
           transform transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
