@@ -1,75 +1,57 @@
 import { useEffect, useState } from "react";
+import { Outlet, useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAuthContext } from "../../context/AuthContext";
 
+import { useAuthContext } from "../../context/AuthContext";
 import { getUserProfile } from "../../backend/profile.service";
-import { getPostsByUser } from "../../backend/post.service";
 
 import ProfileCard from "../profile/ProfileCard";
 import Spinner from "../../helper/Spinner";
 
 const Profile = () => {
   const { user } = useAuthContext();
-
-  const [loading, setLoading] = useState(true);
+  const { openSidebar } = useOutletContext();
 
   const [profile, setProfile] = useState(null);
-  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [postsCount, setPostsCount] = useState(0);
-  const [firstBurialYear, setFirstBurialYear] = useState("-");
-
+  // 🔥 FETCH PROFILE ONCE
   useEffect(() => {
-    if (!user?.uid) return;
+    const fetchProfile = async () => {
+      if (!user) return;
 
-    const fetchAll = async () => {
       try {
         setLoading(true);
-
-        // 🔥 FETCH EVERYTHING IN PARALLEL
-        const [profileData, postsData] = await Promise.all([
-          getUserProfile(user.uid),
-          getPostsByUser(user.uid),
-        ]);
-
-        setProfile(profileData);
-        setPosts(postsData);
-
-        // 📊 STATS
-        setPostsCount(postsData.length);
-
-        if (postsData.length > 0) {
-          const oldest = postsData[postsData.length - 1];
-          if (oldest?.createdAt?.seconds) {
-            setFirstBurialYear(
-              new Date(oldest.createdAt.seconds * 1000).getFullYear()
-            );
-          }
-        }
+        const data = await getUserProfile(user.uid);
+        setProfile(data);
       } catch (err) {
         toast.error(err.message);
       } finally {
-        setLoading(false); // ✅ SINGLE SPINNER STOPS HERE
+        setLoading(false);
       }
     };
 
-    fetchAll();
-  }, [user?.uid]);
+    fetchProfile();
+  }, [user]);
 
   if (loading) {
-    return <Spinner fullScreen text="Loading profile..." />;
+    return (
+      <div className="py-20 flex justify-center">
+        <Spinner text="Loading profile..." />
+      </div>
+    );
   }
 
   if (!profile) return null;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <ProfileCard
-        profile={profile}
-        posts={posts}
-        postsCount={postsCount}
-        firstBurialYear={firstBurialYear}
-      />
+    <div className="max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-6 md:space-y-8">
+
+      {/* 🔥 ALWAYS VISIBLE */}
+      <ProfileCard profile={profile} onOpenSidebar={openSidebar} />
+
+      {/* 🔥 FEATURE AREA */}
+      <Outlet context={{ profile, setProfile }} />
     </div>
   );
 };

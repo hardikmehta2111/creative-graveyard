@@ -7,47 +7,44 @@ import Spinner from "../../helper/Spinner";
 
 const ProfileLayout = () => {
   const { user } = useAuthContext();
-
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (!user?.uid) return;
-
     const fetchProfile = async () => {
       try {
-        setLoading(true);
         const data = await getUserProfile(user.uid);
         setProfile(data);
-      } catch (err) {
-        console.log(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [user?.uid]);
+  }, [user.uid]);
+
+  if (loading) {
+    return (
+      <div className="py-20 flex justify-center">
+        <Spinner text="Loading profile..." />
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-[calc(100vh-80px)] overflow-hidden">
-      {/* ✅ SIDEBAR (no scroll) */}
-      <div className="shrink-0">
-        <ProfileSidebar />
-      </div>
+    <div className="flex min-h-[calc(100vh-80px)]">
+      {/* SIDEBAR */}
+      <ProfileSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      {/* ✅ ONLY MAIN CONTENT scroll */}
-      <main className="flex-1 overflow-y-auto bg-gradient-to-b from-black via-[#020617] to-black p-6">
-        {loading ? (
-          <div className="py-20 flex justify-center">
-            <Spinner text="Loading profile..." />
-          </div>
-        ) : (
-          <Outlet context={{ profile, setProfile }} />
-        )}
+      {/* CONTENT */}
+      <main className="flex-1 bg-gradient-to-b from-black via-[#020617] to-black p-0 md:p-6">
+        <Outlet context={{ profile, setProfile, openSidebar: () => setIsSidebarOpen(true) }} />
+
       </main>
     </div>
   );
 };
 
 export default ProfileLayout;
+
