@@ -7,7 +7,7 @@ const Cross = () => {
     <img
           src={CrossPost}
           alt="Creative Graveyard Logo"
-          className="h-10 w-10 object-contain "
+          className="h-13 w-13 object-contain "
           draggable="false"
         />
   )
