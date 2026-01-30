@@ -62,15 +62,12 @@ const TombstonePostCard = ({ post }) => {
         ref={tombRef}
         onClick={handleOpen}
         className="
-        group
-        relative w-full h-[340px]
-        bg-[#cbd5e1]/90
-        rounded-t-[150px] rounded-b-[16px]
-        overflow-hidden
-        cursor-pointer
-        flex flex-col items-center
-        transition-transform duration-300
-        hover:-translate-y-1
+          relative w-full h-[340px]
+          bg-[#cbd5e1]/90
+          rounded-t-[150px] rounded-b-[16px]
+          shadow-2xl overflow-hidden
+          cursor-pointer
+          flex flex-col items-center
         "
         style={{
           transformStyle: "preserve-3d",
@@ -86,40 +83,38 @@ const TombstonePostCard = ({ post }) => {
         </div>
 
         {/* 📄 CENTER CONTENT */}
-        {/* 📄 CENTER CONTENT */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+<div className="flex-1 flex flex-col items-center justify-center px-6 text-center overflow-hidden">
 
-          {/* TITLE (fixed space) */}
-          <h2
-            className="
-            text-xl font-semibold text-slate-800
-            line-clamp-2
-            min-h-[56px]   
-            "
-          >
-            {post?.title || "Untitled"}
-          </h2>
+  {/* TITLE (fixed space) */}
+  <h2
+    className="
+      text-xl font-semibold text-slate-800
+      line-clamp-2
+      min-h-[56px]   /* 🔒 reserves space */
+    "
+  >
+    {post?.title || "Untitled"}
+  </h2>
 
-          {/* DATE */}
-          <p className="mt-1 text-xs tracking-[0.35em] text-slate-700 uppercase">
-            {dateText}
-          </p>
+  {/* DATE */}
+  <p className="mt-1 text-xs tracking-[0.35em] text-slate-700 uppercase">
+    {dateText}
+  </p>
 
-          {/* DESCRIPTION — ONLY 1 LINE */}
-          <p
-            className="
+  {/* DESCRIPTION — ONLY 1 LINE */}
+  <p
+    className="
       mt-3
       text-[13px] text-slate-700 italic
+      w-[70%]
       line-clamp-1
       min-h-[20px]   /* 🔒 reserves space */
       overflow-hidden
-      w-[70%]
     "
-          >
-            {post?.description || " "}
-          </p>
-        </div>
-
+  >
+    {post?.description || " "}
+  </p>
+</div>
 
         {/* 🪦 RIP */}
         <div className="pb-6">
