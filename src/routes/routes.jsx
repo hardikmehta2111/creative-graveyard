@@ -25,6 +25,7 @@ import EditPhoto from "../components/profile/EditPhoto";
 import ChangePassword from "../components/auth/ChangePassword";
 // import PostCard from "../components/Posts/PostCard";
 import PostDetails from "../components/Posts/PostDetails";
+import EditPost from "../components/Posts/EditPost";
 // import ProfileAvatar from "../components/profile/ProfileAvatar";
 
 const routes = createBrowserRouter([
@@ -58,8 +59,16 @@ const routes = createBrowserRouter([
         ),
       },
       {
-        path:`post/:postId`,
-        element:<PostDetails/>
+        path: `post/:postId`,
+        element: <PostDetails />
+      },
+      {
+        path: "post/:postId/edit",
+        element: (
+          <PrivateRoutes>
+            <EditPost />
+          </PrivateRoutes>
+        ),
       },
 
       // 🔥 PROFILE (NESTED ROUTES)

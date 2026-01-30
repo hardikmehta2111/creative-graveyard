@@ -215,7 +215,9 @@ const PostDetails = () => {
                 {/* Owner actions */}
                 {isOwner && (
                   <div className="mt-5 grid grid-cols-2 gap-3">
-                    <button className="bg-indigo-600 hover:bg-indigo-700 rounded-xl py-2 text-sm transition">
+                    <button 
+                    onClick={() => navigate(`/post/${postId}/edit`)}
+                    className="bg-indigo-600 hover:bg-indigo-700 rounded-xl py-2 text-sm transition">
                       Edit
                     </button>
                     <button

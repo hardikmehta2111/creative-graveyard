@@ -16,6 +16,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { logoutUser } from "../../backend/auth.service";
 
 
 const linkClass = ({ isActive }) =>
@@ -32,7 +33,7 @@ const ProfileSidebarContent = ({ onNavigate }) => {
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
+      await logoutUser(auth);
       toast.success("Signed out successfully");
       navigate("/login");
     } catch {

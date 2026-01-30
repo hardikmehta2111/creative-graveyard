@@ -8,6 +8,7 @@ import {
   orderBy,
   doc,
   getDoc,
+   updateDoc,
 
   // ✅ for likes
   setDoc,
@@ -82,6 +83,16 @@ export const checkIfLiked = async (postId, uid) => {
   return snap.exists();
 };
 
+// Update post 
+export const updatePost = async (postId, payload) => {
+  const postRef = doc(db, "posts", postId);
+
+  await updateDoc(postRef, {
+    ...payload,
+    updatedAt: serverTimestamp(),
+  });
+};
+
 // ✅ toggle like/unlike + update flowersCount safely
 export const toggleFlower = async (postId, uid) => {
   const postRef = doc(db, "posts", postId);
@@ -110,6 +121,8 @@ export const toggleFlower = async (postId, uid) => {
 
     return { liked: true, flowersCount: currentCount + 1 };
   });
+
+  
 
   return result;
 };
