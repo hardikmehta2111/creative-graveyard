@@ -90,9 +90,11 @@ export const signupWithGoogle = async () => {
   const result = await signInWithPopup(auth, googleProvider);
   const user = result.user;
 
+  // ✅ STORE ACCESS TOKEN (same as email login)
+  localStorage.setItem("access token", user.accessToken);
+
   const username = user.email.split("@")[0].toLowerCase();
 
-  // create profile only if not exists
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 
@@ -100,7 +102,6 @@ export const signupWithGoogle = async () => {
     let finalUsername = username;
     let counter = 1;
 
-    // ensure username uniqueness
     while (!(await isUsernameAvailable(finalUsername))) {
       finalUsername = `${username}${counter}`;
       counter++;
