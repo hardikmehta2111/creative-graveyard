@@ -7,6 +7,7 @@ import { getUserProfile } from "../../backend/profile.service";
 import { getPostsByUser } from "../../backend/post.service";
 
 import ProfileCard from "../profile/ProfileCard";
+import ProfileSkeleton from "../profile/ProfileSkeleton";
 import Spinner from "../../helper/Spinner";
 
 const Profile = () => {
@@ -60,7 +61,11 @@ const Profile = () => {
   }, [user?.uid]);
 
   if (loading) {
-    return <Spinner fullScreen text="Loading profile..." />;
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <ProfileSkeleton />
+      </div>
+    );
   }
 
   if (!profile) return null;

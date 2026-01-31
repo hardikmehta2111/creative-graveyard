@@ -29,6 +29,8 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
+      setLoading(false); // ✅ Unblock app immediately
+
       try {
         setProfileLoading(true);
         const data = await getUserProfile(currentUser.uid);
@@ -38,7 +40,6 @@ export const AuthProvider = ({ children }) => {
         setProfile(null);
       } finally {
         setProfileLoading(false);
-        setLoading(false);
       }
     });
 

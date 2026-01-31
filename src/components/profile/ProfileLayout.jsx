@@ -39,13 +39,7 @@ const ProfileLayout = () => {
 
       {/* ✅ ONLY MAIN CONTENT scroll */}
       <main className="flex-1 overflow-y-auto bg-gradient-to-b from-black via-[#020617] to-black p-4 md:p-6">
-        {loading ? (
-          <div className="py-20 flex justify-center">
-            <Spinner text="Loading profile..." />
-          </div>
-        ) : (
-          <Outlet context={{ profile, setProfile, setSidebarOpen }} />
-        )}
+        <Outlet context={{ profile, setProfile, setSidebarOpen }} />
       </main>
     </div>
   );
